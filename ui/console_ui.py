@@ -47,7 +47,8 @@ def print_invalid_input() -> None:
         + "Invalid input detected.\n"
         + Style.RESET_ALL
         + "- Guess must be 5 characters long and contain all letters.\n"
-        "- Previous guesses may not be repeated."
+        "- Previous guesses may not be repeated.\n"
+        "- Guess must be within provided words database."
     )
 
 

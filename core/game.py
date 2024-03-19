@@ -12,9 +12,10 @@ class GameStatus(Enum):
 
 
 class Game:
-    def __init__(self, num_of_guesses: int, word: str) -> None:
+    def __init__(self, num_of_guesses: int, word: str, words: list[str]) -> None:
         self.guesses_allowed = num_of_guesses
         self.word = word
+        self.words = words
         self.status = GameStatus.IN_PROGRESS
         self.current_guess = 1
         self.previous_guesses: list[str] = []
@@ -66,6 +67,9 @@ class Game:
             return False
 
         if guess in self.previous_guesses:
+            return False
+
+        if guess not in self.words:
             return False
 
         return True
