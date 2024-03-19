@@ -1,14 +1,17 @@
 import random
 
+import pandas as pd
+
 from core import factory
 from core.constants import CSV_FILE_PATH
 from core.game import GameStatus
-from core.words import get_words_from_file, pick_word
+from core.words import get_words_from_dataframe, pick_word
 from ui import console_ui
 
 
 def main() -> None:
-    words = get_words_from_file(CSV_FILE_PATH)
+    df = pd.read_csv(CSV_FILE_PATH)  # type: ignore
+    words = get_words_from_dataframe(df)
     word = pick_word(words, random.choice)  # type: ignore
 
     game = factory.create_game(word)
