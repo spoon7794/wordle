@@ -1,5 +1,6 @@
 from colorama import Back, Fore, Style
 
+from core.board import Board
 from core.card import Card, CardStatus
 from core.card_row import CardRow
 
@@ -25,10 +26,10 @@ def print_card_row(card_row: CardRow) -> None:
         print(" ".join(row))
 
 
-def print_board(card_rows: list[CardRow]) -> None:
+def print_board(board: Board) -> None:
     print("\n" * 50)
     print("------------WORDLE------------")
-    for card_row in card_rows:
+    for card_row in board.rows:
         print_card_row(card_row)
     print("------------------------------")
 

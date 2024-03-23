@@ -29,7 +29,6 @@ def stub_picker_fn(words: Iterable[str]) -> str:
 
 
 def test_pick_word_valid_words(simple_words: list[str]) -> None:
-
     actual = pick_word(simple_words, stub_picker_fn)
     expected = "PEACH"
 

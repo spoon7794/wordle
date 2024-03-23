@@ -1,6 +1,7 @@
 from enum import Enum, auto
 
 from core import factory
+from core.board import Board
 from core.card import Card, CardStatus
 from core.card_row import CardRow
 
@@ -12,26 +13,21 @@ class GameStatus(Enum):
 
 
 class Game:
-    def __init__(self, num_of_guesses: int, word: str, words: list[str]) -> None:
+    def __init__(
+        self, num_of_guesses: int, word: str, words: list[str], board: Board
+    ) -> None:
         self.guesses_allowed = num_of_guesses
         self.word = word
         self.words = words
         self.status = GameStatus.IN_PROGRESS
         self.current_guess = 1
         self.previous_guesses: list[str] = []
-        self.board: list[CardRow] = self._initialize_board()
-
-    def _initialize_board(self) -> list[CardRow]:
-        return [
-            factory.create_card_row_from_word(self.word)
-            for _ in range(self.guesses_allowed)
-        ]
+        self.board: Board = board
 
     def _update_board(self, row_num: int, card_row: CardRow) -> None:
-        self.board[row_num - 1] = card_row
+        self.board.update(row_num, card_row)
 
     def _update_status(self, card_row: CardRow) -> None:
-
         letters_match = True
 
         for card in card_row.cards:
