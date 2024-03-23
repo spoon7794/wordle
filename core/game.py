@@ -19,10 +19,11 @@ class Game:
         self.guesses_allowed = num_of_guesses
         self.word = word
         self.words = words
+        self.board: Board = board
+
         self.status = GameStatus.IN_PROGRESS
         self.current_guess = 1
         self.previous_guesses: list[str] = []
-        self.board: Board = board
 
     def _update_status(self, card_row: CardRow) -> None:
         letters_match = True
@@ -41,16 +42,16 @@ class Game:
 
     def check_guess(self, guess: str) -> bool:
         guess = guess.upper().strip()
-        if self._validate_guess(guess):
-            guess_row = self._create_guess_row(guess)
-            self.board.update(self.current_guess, guess_row)
-            self.previous_guesses.append(guess)
-            self.current_guess += 1
+        if not self._validate_guess(guess):
+            return False
 
-            self._update_status(guess_row)
-            return True
+        guess_row = self._create_guess_row(guess)
+        self.board.update(self.current_guess, guess_row)
+        self.previous_guesses.append(guess)
+        self.current_guess += 1
 
-        return False
+        self._update_status(guess_row)
+        return True
 
     def _validate_guess(self, guess: str) -> bool:
         if len(guess) != 5:
