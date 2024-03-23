@@ -24,9 +24,6 @@ class Game:
         self.previous_guesses: list[str] = []
         self.board: Board = board
 
-    def _update_board(self, row_num: int, card_row: CardRow) -> None:
-        self.board.update(row_num, card_row)
-
     def _update_status(self, card_row: CardRow) -> None:
         letters_match = True
 
@@ -46,7 +43,7 @@ class Game:
         guess = guess.upper().strip()
         if self._validate_guess(guess):
             guess_row = self._create_guess_row(guess)
-            self._update_board(self.current_guess, guess_row)
+            self.board.update(self.current_guess, guess_row)
             self.previous_guesses.append(guess)
             self.current_guess += 1
 
