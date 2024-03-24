@@ -1,5 +1,5 @@
 from core.board import Board
-from core.card import Card
+from core.card import Card, CardStatus
 from core.card_row import CardRow
 from core.config import NUM_OF_GUESSES
 from core.game import Game
@@ -12,6 +12,26 @@ def create_card_row_from_word(word: str, visible: bool = False) -> CardRow:
 
 def create_card_row_from_cards(cards: list[Card]) -> CardRow:
     return CardRow(cards)
+
+
+def create_card_row_from_guess(guess: str, word: str) -> CardRow:
+    cards: list[Card] = []
+    actual = word
+
+    for index, letter in enumerate(guess):
+        card = Card(letter, visible=True)
+
+        if letter in actual:
+            if letter == actual[index]:
+                card.status = CardStatus.IN_WORD_CORRECT_SPOT
+            else:
+                card.status = CardStatus.IN_WORD_WRONG_SPOT
+
+            actual = actual.replace(letter, "~", 1)
+
+        cards.append(card)
+
+    return create_card_row_from_cards(cards)
 
 
 def create_board(word: str) -> Board:

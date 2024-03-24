@@ -2,8 +2,9 @@ from enum import Enum, auto
 
 from core import factory
 from core.board import Board
-from core.card import Card, CardStatus
+from core.card import CardStatus
 from core.card_row import CardRow
+from core.config import WORD_LENGTH
 
 
 class GameStatus(Enum):
@@ -41,11 +42,10 @@ class Game:
             self.status = GameStatus.LOSS
 
     def check_guess(self, guess: str) -> bool:
-        guess = guess.upper().strip()
         if not self._validate_guess(guess):
             return False
 
-        guess_row = self._create_guess_row(guess)
+        guess_row = factory.create_card_row_from_guess(guess, self.word)
         self.board.update(self.current_guess, guess_row)
         self.previous_guesses.append(guess)
         self.current_guess += 1
@@ -54,7 +54,7 @@ class Game:
         return True
 
     def _validate_guess(self, guess: str) -> bool:
-        if len(guess) != 5:
+        if len(guess) != WORD_LENGTH:
             return False
 
         if not guess.isalpha():
@@ -67,22 +67,3 @@ class Game:
             return False
 
         return True
-
-    def _create_guess_row(self, guess: str) -> CardRow:
-        cards: list[Card] = []
-        actual = self.word
-
-        for index, letter in enumerate(guess):
-            card = Card(letter, visible=True)
-
-            if letter in actual:
-                if letter == actual[index]:
-                    card.status = CardStatus.IN_WORD_CORRECT_SPOT
-                else:
-                    card.status = CardStatus.IN_WORD_WRONG_SPOT
-
-                actual = actual.replace(letter, "~", 1)
-
-            cards.append(card)
-
-        return factory.create_card_row_from_cards(cards)
